@@ -6,7 +6,7 @@ To Perform the various feature selection techniques on a dataset and save the da
 Feature selection is to find the best set of features that allows one to build useful models.
 Selecting the best features helps the model to perform well. 
 
-## ALGORITHM
+# ALGORITHM
 ### STEP 1
 Read the given Data
 ### STEP 2
@@ -17,114 +17,223 @@ Apply Feature selection techniques to all the features of the data set
 Save the data to the file
 
 
-## CODE
+## CODE and OUTPUT
 ```
-Developed By:GURUMOORTHI R
-Register no:212222230042
+DEVELOPED BY: GURUMOORTHI R
+REG NO: 212222230042
 ```
 ```
-import numpy as np
 import pandas as pd
-from sklearn.feature_selection import mutual_info_classif
-from sklearn.feature_selection import SelectKBest
-
+```
+```
 df=pd.read_csv("titanic_dataset.csv")
-df1=df.drop({"Name","Sex","Ticket","Cabin","Embarked"},axis=1)
+df
+```
+
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/b4566409-e2dd-499e-82a5-39d8daff155e)
+
+```
+df.columns
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/be73f7e1-a04d-4eb6-895f-bf64baeb568a)
+
+```
+df.shape
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/6aa71ac3-e5b7-48c3-96ea-21ab36b116ed)
+
+```
+X=df.drop("Survived",1)
+Y=df['Survived']
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/d35e1f77-471e-4b22-82a4-ffed00ac3ea0)
+
+```
+df1=df.drop(["Name","Sex","Ticket","Cabin","Embarked"],axis=1)
+```
+```
 df1.columns
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/5fdd95f9-3c6d-486d-9bd9-cd987f33f2e2)
+
+```
 df1['Age'].isnull().sum()
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/ed42a4da-be8f-4bd8-9f22-d2e8ec549d3a)
+```
 df1['Age'].fillna(method='ffill')
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/9d969fc5-f727-4e35-b627-495e4c772655)
+```
 df1['Age']=df1['Age'].fillna(method='ffill')
+```
+```
 df1['Age'].isnull().sum()
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/90193309-c005-4549-9823-b7598c5cb3c1)
 
-feature =SelectKBest(mutual_info_classif,k=3)
+```
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import mutual_info_classif
+```
+```
+feature=SelectKBest(mutual_info_classif,k=3)
+feature
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/e04c5904-4a7d-4acd-b0d7-4d9dc299f757)
+```
+cols=df1.columns.tolist()
+cols[-1],cols[1]=cols[1],cols[-1]
+df1=df1[cols]
 df1.columns
-data=pd.read_csv("titanic_dataset.csv")
-data
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/5bf3641f-ac40-409b-b3e0-b0941e6cd3ba)
 
-data=data.dropna()
-x=data.drop(['Survived','Name','Ticket'],axis=1)
-y=data['Survived']
-x
-y
+```
+X=df1.iloc[:,0:6]
+Y=df1.iloc[:,6]
+```
+```
+X.columns
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/e0b27216-7013-42e9-b0c6-155c43c2c2b5)
+```
+Y=Y.to_frame()
+Y.columns
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/6c6bbcb7-116f-4862-b7b4-c7b9960c38b7)
 
-data["Sex"]=data["Sex"].astype("category")
-data["Cabin"]=data["Cabin"].astype("category")
-data["Embarked"]=data["Embarked"].astype("category")
-
-data["Sex"]=data["Sex"].cat.codes
-data["Cabin"]=data["Cabin"].cat.codes
-data["Embarked"]=data["Embarked"].cat.codes
-
-data
-
+**Chi2 method**
+```
 from sklearn.feature_selection import chi2
-selector=SelectKBest(score_func=chi2,k=5)
-x_new=selector.fit_transform(x,y)
-
+data=df.copy()
+```
+```
+data=data.dropna()
+```
+```
+X=data.drop(['Survived','Name','Ticket'],axis=1)
+Y=data['Survived']
+X
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/70d62334-d2dd-4c91-ba35-2b3c820260dd)
+```
+data['Sex']=data['Sex'].astype('category')
+data['Cabin']=data['Cabin'].astype('category')
+data['Embarked']=data['Embarked'].astype('category')
+```
+```
+data['Sex']=data['Sex'].cat.codes
+data['Cabin']=data['Cabin'].cat.codes
+data['Embarked']=data['Embarked'].cat.codes
+```
+```
+data
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/3c4ec200-8cc0-45bc-894f-4a6e778bd7a4)
+```
+k=5
+selector=SelectKBest(score_func=chi2,k=k)
+x_new=selector.fit_transform(X,Y)
+```
+```
 selected_feature_indices=selector.get_support(indices=True)
-
-selected_features=x.columns[selected_feature_indices]
-print("Selected Features")
+selected_features=X.columns[selected_feature_indices]
+print("Selected_features")
 print(selected_features)
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/1395f06d-9c01-4a53-9b6f-893217f6631a)
+```
+X.info()
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/54a2638a-cb17-4ec8-b2b1-88b3aeb2c296)
 
-x.info()
-
-x=x.drop(["Sex","Cabin","Embarked"],axis=1)
-from sklearn.feature_selection import SelectKBest,f_regression
-
+**Correlation coefficient**
+```
+from sklearn.feature_selection import f_regression
 selector=SelectKBest(score_func=f_regression,k=5)
-x_new=selector.fit_transform(x,y)
+x_new=selector.fit_transform(X,Y)
+```
+```
 selected_feature_indices=selector.get_support(indices=True)
-
-selected_features=x.columns[selected_feature_indices]
-print("Selected Features")
+selected_features=X.columns[selected_feature_indices]
+print("selected_features")
 print(selected_features)
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/1cf9853e-d725-4320-9e6b-c31a4638a77c)
 
+**Mutual information**
+```
+from sklearn.feature_selection import mutual_info_classif
+selector=SelectKBest(score_func=mutual_info_classif,k=5)
+x_new=selector.fit_transform(X,Y)
+```
+```
+selected_feature_indices=selector.get_support(indices=True)
+selected_features=X.columns[selected_feature_indices]
+print("Selected features:")
+print(selected_features)
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/4d525acf-457a-4535-88ba-4da10a93c42b)
+```
+from sklearn.feature_selection import SelectPercentile,chi2
+selector=SelectPercentile(score_func=chi2,percentile=10)
+X_new=selector.fit_transform(X,Y)
+```
+**Forward selection**
+```
 from sklearn.feature_selection import SelectFromModel
 from sklearn.ensemble import RandomForestClassifier
+```
+```
 model=RandomForestClassifier()
 sfm=SelectFromModel(model,threshold='mean')
-sfm.fit(x,y)
-selected_features=x.columns[sfm.get_support()]
-print("Selected Features:")
+sfm.fit(X,Y)
+selected_features=X.columns[sfm.get_support()]
+print("selected features")
 print(selected_features)
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/c313f8c4-53c8-45ca-ab6b-03c2b5bb76c7)
+
+**Backward elimination**
+```
 from sklearn.feature_selection import RFE
 from sklearn.linear_model import LogisticRegression
-
+```
+```
 model=LogisticRegression()
 num_features_to_remove=2
-rfe=RFE(model,n_features_to_select=(len(x.columns)-num_features_to_remove))
-
-rfe.fit(x,y)
-selected_features=x.columns[rfe.support_]
-
-print("Selected Features:")
+rfe=RFE(model,n_features_to_select=(len(X.columns))-num_features_to_remove)
+rfe.fit(X,Y)
+selected_features=X.columns[rfe.support_]
+print("Selected features")
 print(selected_features)
-
 ```
-## OUTPUT
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/53bc4c0f-d3f4-4de9-a5dd-a5da60ad7df0)
 
-![image](https://github.com/kavinesh8476/ODD2023-Datascience-Ex-07/assets/118466561/088d8d1c-bb5f-4db7-898f-713adecf5fae)
-
-![image](https://github.com/kavinesh8476/ODD2023-Datascience-Ex-07/assets/118466561/d09ac470-306f-4f93-a847-04c7a26329bb)
-
-![image](https://github.com/kavinesh8476/ODD2023-Datascience-Ex-07/assets/118466561/1639c43c-0a52-494f-95e2-f224e58fb538)
-
-![image](https://github.com/kavinesh8476/ODD2023-Datascience-Ex-07/assets/118466561/99db142b-cbd0-4a3b-a742-3a3d87aa4e7e)
-
-![image](https://github.com/kavinesh8476/ODD2023-Datascience-Ex-07/assets/118466561/2e8ae3da-4b5e-43d2-ba5d-d8c180f7a28d)
-
-![image](https://github.com/kavinesh8476/ODD2023-Datascience-Ex-07/assets/118466561/d70da928-2f5d-4316-8f43-cbf653fa2bdc)
-
-![image](https://github.com/kavinesh8476/ODD2023-Datascience-Ex-07/assets/118466561/fca6a195-79d5-4507-8ec7-6ec9ed24640f)
-
-![image](https://github.com/kavinesh8476/ODD2023-Datascience-Ex-07/assets/118466561/f945802f-3d39-4829-8dd6-26d0135c167a)
-
-![image](https://github.com/kavinesh8476/ODD2023-Datascience-Ex-07/assets/118466561/aafb74aa-8c04-4c5a-a288-df4638d15b5b)
-
-![image](https://github.com/kavinesh8476/ODD2023-Datascience-Ex-07/assets/118466561/a5809c85-083b-400e-ab5d-f54c0b9fb35f)
-
-![image](https://github.com/kavinesh8476/ODD2023-Datascience-Ex-07/assets/118466561/02b95ffd-e1ef-471c-a921-c82ab11e4213)
+**EMBEDDED METHODS**
+```
+from sklearn.linear_model import Lasso
+```
+```
+model=Lasso(alpha=0.01)
+model.fit(X,Y)
+feature_coefficients=model.coef_
+selected_features=X.columns[feature_coefficients!=0]
+print("Selected features")
+print(selected_features)
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/1c64d303-0bc2-414d-90fd-fba7018eba26)
+```
+model=RandomForestClassifier(n_estimators=100,random_state=42)
+model.fit(X,Y)
+feature_importances=model.feature_importances_
+threshold=0.15
+selected_features=X.columns[feature_importances>threshold]
+print("selected features")
+print(selected_features)
+```
+![image](https://github.com/Pranav-AJ/ODD2023-Datascience-Ex-07/assets/118904526/6e378e75-7a45-47ab-b4a0-151b2ff40d8c)
 
 ## RESULT
-Thus, Sucessfully performed the various feature selection techniques on a given dataset.
+Hence various feature selection techniques were performed on the dataset.
